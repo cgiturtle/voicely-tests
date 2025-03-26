@@ -1,0 +1,40 @@
+{
+   "action": {
+      "default_popup": "views/popup.html",
+      "default_title": "voicely-browser-extension"
+   },
+   "background": {
+      "service_worker": "js/bs_bg.bundle.js",
+      "type": "module"
+   },
+   "content_scripts": [ {
+      "css": [ "js/vendors/featherlight/featherlight.css", "css/css_lt_marker_style.css", "css/css_voicely_icon.css" ],
+      "js": [ "js/vendors/jquery.min.js", "js/vendors/purify.js", "js/vendors/ally.js", "js/vendors/most.js", "js/vendors/featherlight/featherlight.js", "js/share_helpers.bundle.js", "js/share_tools.bundle.js", "js/share_markup.bundle.js", "js/cs_contentscript.bundle.js", "js/cs_textarea.bundle.js", "js/cs_voicely_icon.bundle.js", "js/cs_mic_animation.bundle.js" ],
+      "matches": [ "\u003Call_urls>" ]
+   } ],
+   "content_security_policy": {
+      "extension_pages": "script-src 'self'; object-src 'self'; script-src-elem 'self' 'unsafe-inline';"
+   },
+   "default_locale": "en",
+   "description": "Privacy-first voice typing for the web",
+   "externally_connectable": {
+      "ids": [ "*" ]
+   },
+   "host_permissions": [ "\u003Call_urls>" ],
+   "icons": {
+      "128": "img/icon-128x128.png",
+      "16": "img/icon-16x16.png",
+      "48": "img/icon-48x48.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1ojWhv7916ErdkOy4G653ETcgTjPVo8oPFEFj7kc2Y3L6rBPozKqLLxS65LbqSpZFXfE7HCnE96AOZoGFvC0Y6ymk854lPBq+PNNNY3ao9mQhFWanm1KpK2DTXCW73jaPfyYZ1o6NXToQJ+SGxv421WxZjIhNQM43pwIW83hPj8NWCUhVoZrq2kH1rmWIM+2hQM3yAha+ET6YYwOC3STsGZQ9IqKLQwGwpVWOd+G2yebvUv3FK8SiScbNeJ/8AJg2GRtwZpCVhPweKU7b6pYz688cIE+IggsDiYO6G5sGpwDcsc6j5IICURCbcRnU7aumjCR+w93HwMBPNbj6eic6wIDAQAB",
+   "manifest_version": 3,
+   "name": "Voicely",
+   "options_page": "views/index.html",
+   "permissions": [ "storage", "activeTab" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "1.0.2",
+   "web_accessible_resources": [ {
+      "matches": [ "\u003Call_urls>" ],
+      "resources": [ "views/*", "js/*", "css/*", "img/*" ]
+   } ]
+}

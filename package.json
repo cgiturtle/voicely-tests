@@ -1,0 +1,15 @@
+{
+  "name": "voicely",
+  "version": "1.0.0",
+  "description": "",
+  "main": "voicely.test.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "jest": "^29.7.0",
+    "puppeteer": "^24.4.0"
+  }
+}

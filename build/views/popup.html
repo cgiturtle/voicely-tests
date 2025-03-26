@@ -1,0 +1,228 @@
+<html>
+<head>
+    <link rel="stylesheet" href="../css/popup.css">
+    <title>Voicely — voice typing for the web</title>
+    <meta charset="utf-8">
+    <style>
+        @import "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap";
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Inter, sans-serif;
+            font-size: 14px;
+            line-height: 1.4
+        }
+    </style>
+    <style id="_goober">
+        @keyframes go2264125279 {
+            from {
+                transform: scale(0) rotate(45deg);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1) rotate(45deg);
+                opacity: 1;
+            }
+        }
+
+        @keyframes go3020080000 {
+            from {
+                transform: scale(0);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes go463499852 {
+            from {
+                transform: scale(0) rotate(90deg);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1) rotate(90deg);
+                opacity: 1;
+            }
+        }
+
+        @keyframes go1268368563 {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes go1310225428 {
+            from {
+                transform: scale(0) rotate(45deg);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1) rotate(45deg);
+                opacity: 1;
+            }
+        }
+
+        @keyframes go651618207 {
+            0% {
+                height: 0;
+                width: 0;
+                opacity: 0;
+            }
+
+            40% {
+                height: 0;
+                width: 6px;
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 1;
+                height: 10px;
+            }
+        }
+
+        @keyframes go901347462 {
+            from {
+                transform: scale(0.6);
+                opacity: 0.4;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .go4109123758 {
+            z-index: 9999;
+        }
+
+        .go4109123758>* {
+            pointer-events: auto;
+        }
+    </style>
+<link href="../css/popup.css" rel="stylesheet"></head>
+<body>
+    <div id="root">
+        <div class="text-base">
+            <div class="w-[276px] h-[302px]">
+                <div class="w-[276px] rounded-lg text-cool-gray-700 text-sm">
+                    <div class="sticky top-0 bg-white z-20" data-testid="header-wrapper">
+                        <div class="h-14 w-screen shadow-lg shadow-neutral-100 flex items-center"><button>
+                                <div class="flex items-center ml-6" data-testid="Voicely-logo">
+                                  <img
+                                    src="../img/icon-plus-lettering.png"
+                                    alt="Voicely Logo" class="w-20">
+                                  <!-- <img
+                                    src="../img/icon-128x128.png"
+                                    alt="Voicely Title" class="ml-2 mt-1 h-5"> -->
+                                </div>
+                            </button>
+                            <div class="inline-block pl-2" data-testid="pill-beta">
+                                <div
+                                    class="flex items-center px-1 py-1/2 text-xs font-medium leading-5 rounded text-gold-600 bg-gold-50">
+                                    Beta</div>
+                            </div>
+                            <div class="ml-auto">
+                                <div class="flex pr-4 pt-0.5 text-neutral-400">
+                                  <button
+                                    data-testid="modal-close-button"
+                                    id="close-modal-button"
+                                    class="flex justify-center items-center p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-200 cursor-pointer rounded-full h-8 w-8"
+                                    >
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                      aria-hidden="true" class="h-5">
+                                      <path fill-rule="evenodd"
+                                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                          clip-rule="evenodd">
+                                      </path>
+                                    </svg>
+                                  </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-full  flex justify-between px-4 py-3 h-[66px] rounded-t-lg">
+                        <div>
+                          <input type="text" placeholder="Note something done here" style="height: 100%; width: 244px">
+                            <!-- <div class="text-base truncate w-[220px] leading-7">Personal</div>
+                            <div class="text-blue-500 text-xs cursor-pointer">Change Project</div> -->
+                        </div>
+                    </div>
+                    <div class="pt-3 flex flex-col justify-between leading-9 pb-2">
+                        <div class="pb-3">
+                            <div class="px-4 flex justify-between">
+                                <div>Enable Voicely on this site</div>
+                                <div class="flex items-center" data-testid="toggle-switch-container">
+                                    <button
+                                        class="bg-[#1C64F2] relative inline-flex flex-shrink-0 h-[20px] w-[40px] border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-150 focus:outline-none focus:ring-z focus:ring-offset-2 focus:ring-indigo-500"
+                                        id="headlessui-switch-1" role="switch" type="button" tabindex="0" aria-checked="true">
+                                            <span id="toggle-span" aria-hidden="true" class="translate-x-5 pointer-events-none inline-block h-[16px] w-[16px] rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-150">
+
+                                            </span>
+                                    </button>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="px-4 flex items-center cursor-pointer hover:bg-[#EBF5FF]">
+                            <a class="flex items-center" target="_blank" href="mailto:info@getvoicely.com?subject=Voicely-Feedback">
+                                <svg
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                aria-hidden="true" class="stroke-2 h-[20px] w-[20px] mr-1 text-gray-400">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9">
+                                </path>
+                                </svg>
+                            Give Feedback
+                            </a>
+                        </div>
+                        <a href="https://voicely.vercel.app/settings" target="_blank" rel="noopener noreferrer">
+                            <div class="px-4 flex items-center cursor-pointer hover:bg-[#EBF5FF]"><svg
+                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                    aria-hidden="true" class="stroke-2 h-[20px] w-[20px] mr-1 text-gray-400">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                                    </path>
+                                </svg>Help</div>
+                        </a>
+                        <!-- <a href="https://voicely.vercel.app" target="_blank" rel="noopener noreferrer" id="login-element">
+                            <div class="px-4 flex items-center cursor-pointer hover:bg-[#EBF5FF]">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="stroke-2 h-[20px] w-[20px] mr-1 text-gray-400">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+                                  </svg>
+
+                                Sign In</div>
+                        </a> -->
+                        <a href="https://voicely.vercel.app" target="_blank" rel="noopener noreferrer">
+
+                            <div class="px-4 flex items-center cursor-pointer hover:bg-[#EBF5FF]">
+                                <svg
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                aria-hidden="true" class="stroke-2 h-[20px] w-[20px] mr-1 text-gray-400">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+                            </path>
+                        </svg>Sign Out</div>
+                    </a>
+                    </div>
+                </div>
+            </div>
+            <div style="position: fixed; z-index: 9999; inset: 16px; pointer-events: none;"></div>
+        </div>
+    </div>
+    <!-- <script src="http://localhost:8887/popup.730d4668.js" type="module"></script> -->
+<script type="text/javascript" src="../js/popup.bundle.js"></script></body>
+</html>
