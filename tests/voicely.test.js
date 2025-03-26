@@ -75,9 +75,9 @@ describe('Voicely Extension Integration Test', () => {
         try {
             console.log('Starting browser with extension path:', extensionPath);
             browser = await puppeteer.launch({
-                headless: false,
+                headless: true,
                 defaultViewport: null,
-                executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+                executablePath: '/usr/bin/chromium-browser',
                 args: [
                     `--disable-extensions-except=${extensionPath}`,
                     `--load-extension=${extensionPath}`,
