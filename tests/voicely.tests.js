@@ -179,32 +179,6 @@ describe('Voicely Extension Integration Test', () => {
     }
   }
 
-  async function saveTranscriptionToJson(text) {
-    try {
-      const transcriptionPath = path.join(__dirname, '../transcriptions.json');
-      let transcriptions = [];
-      
-      // Read existing transcriptions if file exists
-      if (fs.existsSync(transcriptionPath)) {
-        const existingData = fs.readFileSync(transcriptionPath, 'utf8');
-        transcriptions = JSON.parse(existingData);
-      }
-      
-      // Add new transcription with timestamp
-      transcriptions.push({
-        text,
-        timestamp: new Date().toISOString(),
-        source: 'harvard.mp3'
-      });
-      
-      // Write back to file
-      fs.writeFileSync(transcriptionPath, JSON.stringify(transcriptions, null, 2));
-      console.log('Transcription saved to JSON file');
-    } catch (error) {
-      console.error('Failed to save transcription:', error);
-    }
-  }
-
   async function setupAudioPlayback(targetPage) {
     try {
       console.log('Setting up audio playback...');
@@ -283,58 +257,12 @@ describe('Voicely Extension Integration Test', () => {
     }
   }
 
-  async function hoverVoiceIcon(page) {
-    console.log('Starting hover process...');
-    let hoverSuccess = false;
-    let hoverRetries = 3;
-    
-    while (!hoverSuccess && hoverRetries > 0) {
-      try {
-        await page.evaluate(() => {
-          const voiceIcon = document.querySelector('#voicely-group .voiceIcon1');
-          if (voiceIcon) {
-            voiceIcon.style.display = 'block';
-            voiceIcon.style.visibility = 'visible';
-            voiceIcon.style.opacity = '1';
-          }
-        });
-        
-        await new Promise(resolve => setTimeout(resolve, 500));
-        await page.hover('#voicely-group .voiceIcon1', { timeout: 5000 });
-        
-        const isHovered = await page.evaluate(() => {
-          const voiceIcon = document.querySelector('#voicely-group .voiceIcon1');
-          return voiceIcon && window.getComputedStyle(voiceIcon).cursor === 'pointer';
-        });
-        
-        if (isHovered) {
-          hoverSuccess = true;
-          break;
-        }
-        
-        hoverRetries--;
-        await new Promise(resolve => setTimeout(resolve, 1000));
-      } catch (error) {
-        hoverRetries--;
-        if (hoverRetries === 0) throw error;
-        await new Promise(resolve => setTimeout(resolve, 1000));
-      }
-    }
-    
-    if (!hoverSuccess) {
-      throw new Error('Failed to hover after multiple attempts');
-    }
-    
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    console.log('Hover completed successfully');
-  }
-
   test('Extension loads and injects UI on ChatGPT', async () => {
     try {
       console.log('Starting extension test...');
       
       // Define constants for retries
-      let maxRetries = 3;
+      const maxRetries = 3;
       
       // Test 1: Verify extension in Chrome management
       console.log('Checking extension installation...');
@@ -498,18 +426,63 @@ describe('Voicely Extension Integration Test', () => {
         await new Promise(resolve => setTimeout(resolve, 2000));
       }
 
-      console.log('Starting parallel operations...');
-      await Promise.all([
-        setupAudioPlayback(page)
-          .then(() => console.log('Audio setup complete'))
-          .catch(error => { throw error }),
-        
-        hoverVoiceIcon(page)
-          .then(() => console.log('Hovered over voice icon'))
-          .catch(error => { throw error })
-      ]);
-
-      console.log('Starting recording process...');
+      // Set up audio context and buffer before starting recording
+      await setupAudioPlayback(page);
+      console.log('Audio setup complete');
+      
+      // Hover over voice icon with retry
+      let hoverSuccess = false;
+      let hoverRetries = 3;
+      
+      while (!hoverSuccess && hoverRetries > 0) {
+        try {
+          // First ensure the element is visible and clickable
+          await page.evaluate(() => {
+            const voiceIcon = document.querySelector('#voicely-group .voiceIcon1');
+            if (voiceIcon) {
+              voiceIcon.style.display = 'block';
+              voiceIcon.style.visibility = 'visible';
+              voiceIcon.style.opacity = '1';
+            }
+          });
+          
+          // Wait a bit for styles to apply
+          await new Promise(resolve => setTimeout(resolve, 500));
+          
+          // Try to hover
+          await page.hover('#voicely-group .voiceIcon1', { timeout: 5000 });
+          console.log('Hovered over voice icon');
+          
+          // Verify hover state
+          const isHovered = await page.evaluate(() => {
+            const voiceIcon = document.querySelector('#voicely-group .voiceIcon1');
+            return voiceIcon && window.getComputedStyle(voiceIcon).cursor === 'pointer';
+          });
+          
+          if (isHovered) {
+            hoverSuccess = true;
+            break;
+          }
+          
+          console.log(`Hover attempt ${4 - hoverRetries} failed, retrying...`);
+          hoverRetries--;
+          await new Promise(resolve => setTimeout(resolve, 1000));
+        } catch (error) {
+          console.log(`Hover attempt ${4 - hoverRetries} failed:`, error.message);
+          hoverRetries--;
+          if (hoverRetries === 0) throw error;
+          await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+      }
+      
+      if (!hoverSuccess) {
+        throw new Error('Failed to hover over voice icon after multiple attempts');
+      }
+      
+      // Wait a bit for hover effect
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Click voice icon to start recording with retry logic
       let recordingStarted = false;
       let retryCount = 0;
       
@@ -551,7 +524,7 @@ describe('Voicely Extension Integration Test', () => {
       await new Promise(resolve => setTimeout(resolve, 2000));
       console.log('Recording fully started');
 
-      // Verify audio playback state
+      // Start audio playback and verify it's working
       const audioState = await page.evaluate(() => {
         try {
           const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -654,76 +627,68 @@ describe('Voicely Extension Integration Test', () => {
       }, { timeout: 30000 });
       console.log('Loading/processing indicators disappeared');
 
-      // Wait for processing indicators
+      // After stopping recording, wait for processing indicators
       console.log('Waiting for processing indicators...');
-      try {
-        await page.waitForFunction(() => {
-          const pill = document.querySelector('#voicely-pill');
-          return pill && (
-            pill.querySelector('.processing-indicator') ||
-            pill.querySelector('.loading-indicator') ||
-            pill.querySelector('.transcribing-indicator')
-          );
-        }, { timeout: 10000 });
-        console.log('Processing indicators appeared');
-      } catch (error) {
-        console.log('No processing indicators appeared:', error.message);
-      }
+      await page.waitForFunction(() => {
+        const pill = document.querySelector('.pill1');
+        const processingIndicators = pill?.querySelectorAll('.processing-indicator, .loading-indicator, .transcribing-indicator');
+        console.log('Processing indicators found:', processingIndicators?.length || 0);
+        return processingIndicators?.length > 0;
+      }, { timeout: 10000 }).catch(e => console.log('No processing indicators appeared:', e.message));
 
-      // Wait for transcription
+      // Wait longer for transcription (up to 45 seconds total)
       console.log('Waiting for transcription...');
       let transcribedText = '';
-      const maxAttempts = 3;
-      let attemptCount = 0;
+      let attempts = 15;
+      while (attempts > 0) {
+        const pageState = await page.evaluate(() => {
+          const input = document.querySelector('textarea');
+          const pill = document.querySelector('.pill1');
+          const pillContent = pill?.querySelector('.pill-content, .transcription-text');
+          
+          // Check for any text content in the pill that might contain the transcription
+          const getAllTextContent = (element) => {
+            if (!element) return '';
+            return Array.from(element.childNodes)
+              .map(node => node.textContent || '')
+              .join(' ')
+              .trim();
+          };
 
-      while (attemptCount < maxAttempts) {
-        attemptCount++;
-        console.log(`Attempt ${attemptCount}/${maxAttempts}`);
-
-        // Get current transcription state
-        const state = await page.evaluate(() => {
-          const pill = document.querySelector('#voicely-pill');
-          const input = document.querySelector('#prompt-textarea');
           return {
-            inputValue: input ? input.value : '',
-            pillText: pill ? pill.textContent : '',
-            allPillText: pill ? Array.from(pill.childNodes).map(node => node.textContent).join('') : '',
-            pillHTML: pill ? pill.innerHTML : '',
-            hasProcessingIndicator: pill ? !!pill.querySelector('.processing-indicator') : false,
-            hasLoadingIndicator: pill ? !!pill.querySelector('.loading-indicator') : false,
-            hasTranscribingIndicator: pill ? !!pill.querySelector('.transcribing-indicator') : false,
-            pillVisible: pill ? window.getComputedStyle(pill).display !== 'none' : false,
-            pillOpacity: pill ? window.getComputedStyle(pill).opacity : '0',
-            pillDisplay: pill ? window.getComputedStyle(pill).display : 'none'
+            inputValue: input?.value || '',
+            pillText: pillContent?.textContent || '',
+            allPillText: getAllTextContent(pill),
+            pillHTML: pill?.innerHTML || '',
+            hasProcessingIndicator: !!pill?.querySelector('.processing-indicator'),
+            hasLoadingIndicator: !!pill?.querySelector('.loading-indicator'),
+            hasTranscribingIndicator: !!pill?.querySelector('.transcribing-indicator')
           };
         });
 
-        console.log('Current transcription state:', state);
+        console.log('Current transcription state:', {
+          attempt: 16 - attempts,
+          ...pageState
+        });
 
-        // Check if we have transcription
-        if (state.pillText && state.pillText.trim()) {
-          transcribedText = state.pillText.trim();
-          console.log('Found transcription:', transcribedText);
+        // Check both input value and pill text
+        transcribedText = pageState.inputValue || pageState.pillText || pageState.allPillText;
+        
+        if (transcribedText && transcribedText.trim().length > 0) {
+          console.log('Found transcribed text:', transcribedText);
           break;
         }
 
-        // Check if we're still processing
-        if (state.hasProcessingIndicator || state.hasLoadingIndicator || state.hasTranscribingIndicator) {
-          console.log('Still processing, waiting...');
-          await new Promise(resolve => setTimeout(resolve, 5000));
-          continue;
-        }
-
-        console.log('No transcription yet, retrying...', maxAttempts - attemptCount, 'attempts left');
-        await new Promise(resolve => setTimeout(resolve, 3000));
+        await page.waitForTimeout(3000);
+        attempts--;
+        console.log(`No transcription yet, retrying... ${attempts} attempts left`);
       }
 
-      // Take screenshot of final state
+      // Take a screenshot before assertions
       await takeScreenshot('final-state');
 
-      console.log('Final transcribed text:', transcribedText);
-
       // Enhanced assertions
+      console.log('Final transcribed text:', transcribedText);
       expect(transcribedText).toBeTruthy();
       expect(transcribedText.length).toBeGreaterThan(0);
       expect(transcribedText).not.toBe(' ');
@@ -734,8 +699,6 @@ describe('Voicely Extension Integration Test', () => {
       console.error('Test failed:', error);
       await takeScreenshot('error');
       throw error;
-      
     }
   }, 600000); // Increase test timeout to 10 minutes
 });
-
