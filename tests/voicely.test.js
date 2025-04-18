@@ -262,7 +262,7 @@ describe('Voicely Extension Integration Test', () => {
             console.log('Starting extension test...');
 
             // Define constants for retries
-            const maxRetries = 3;
+            let maxRetries = 3;
 
             // Test 1: Verify extension in Chrome management
             console.log('Checking extension installation...');
