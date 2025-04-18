@@ -1,0 +1,31 @@
+name: integration-test
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:  
+  
+jobs:
+  run-integration-tests:
+    name: Run Integration Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install Chromium
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y chromium-browser
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Jest integration tests
+        run: npx jest tests/voicely.test.js
+        env:
+          CI: true
