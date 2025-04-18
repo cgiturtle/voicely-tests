@@ -1,21 +1,59 @@
-name: integration-test
-
-run-name: ${{ github.actor }} is testing her frontend
+name: Integration Tests
 
 on:
-    pull_request:
-      branches:
-        - main
-    workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
   
 jobs:
   run-integration-tests:
+    name: Run Integration Tests
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v3
+
       - uses: actions/setup-node@v3
         with:
           node-version: '20'
-      - run: sudo apt-get install chromium-browser
-      - run: npm install
-      - run: node_modules/.bin/jest tests/voicely.test.js
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y chromium-browser libgbm-dev xvfb
+          npm ci
+
+      - name: Verify Chrome installation
+        run: |
+          chromium-browser --version
+          which chromium-browser
+
+      - name: Run Jest integration tests
+        run: |
+          xvfb-run --auto-servernum npx jest tests/voicely.test.js \
+            --detectOpenHandles \
+            --forceExit \
+            --verbose \
+            --reporters=default \
+            --reporters=jest-junit
+        env:
+          CI: true
+          DISPLAY: ':99'
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
+          PUPPETEER_EXECUTABLE_PATH: '/usr/bin/chromium-browser'
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-screenshots
+          path: screenshots/
+
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-report
+          path: test-report.xml
