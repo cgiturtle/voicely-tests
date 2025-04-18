@@ -22,7 +22,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y chromium-browser libgbm-dev xvfb
+          sudo apt-get install -y chromium-browser libgbm-dev xvfb libxshmfence1
           npm ci
 
       - name: Verify Chrome installation
@@ -46,14 +46,14 @@ jobs:
 
       - name: Upload screenshots
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: test-screenshots
           path: screenshots/
 
       - name: Upload test report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: test-report
-          path: test-report.xml
+          path: test-results/junit.xml
