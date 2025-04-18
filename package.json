@@ -1,40 +1,15 @@
 {
   "name": "voicely",
   "version": "1.0.0",
-  "description": "Voicely Chrome Extension",
+  "description": "",
   "main": "voicely.test.js",
   "scripts": {
-    "test": "jest tests/voicely.test.js --detectOpenHandles --forceExit --verbose",
-    "test:ci": "xvfb-run --auto-servernum jest tests/voicely.test.js --ci --reporters=default --reporters=jest-junit",
-    "build": "your-build-command-here",
-    "lint": "eslint .",
-    "prettier": "prettier --write ."
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Your Name",
+  "author": "",
   "license": "ISC",
   "dependencies": {
-    "puppeteer": "^24.4.0"
-  },
-  "devDependencies": {
     "jest": "^29.7.0",
-    "jest-junit": "^16.0.0",
-    "eslint": "^8.56.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-jest": "^27.9.0",
-    "prettier": "^3.2.5",
-    "@types/jest": "^29.5.12",
-    "@types/puppeteer": "^5.4.6"
-  },
-  "jest": {
-    "testEnvironment": "node",
-    "setupFilesAfterEnv": ["./jest.setup.js"],
-    "testTimeout": 300000,
-    "reporters": [
-      "default",
-      ["jest-junit", {
-        "outputDirectory": "test-results",
-        "outputName": "junit.xml"
-      }]
-    ]
+    "puppeteer": "^24.4.0"
   }
 }
