@@ -12,17 +12,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     
-    # Add strategy for matrix if needed in future
-    strategy:
-      matrix:
-        node-version: [20.x]
-    
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4  # Also update checkout to v4 for consistency
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4  # Update to v4
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
@@ -33,7 +28,7 @@ jobs:
           sudo apt-get install -y chromium-browser libgbm-dev xvfb libxshmfence1
 
       - name: Install npm dependencies
-        run: npm ci
+        run: npm install  # ← CHANGED FROM npm ci TO npm install
 
       - name: Verify Chrome installation
         run: |
@@ -60,7 +55,7 @@ jobs:
         with:
           name: test-screenshots
           path: screenshots/
-          retention-days: 7  # Optional: set retention period
+          retention-days: 7
 
       - name: Upload test report
         if: always()
@@ -68,4 +63,4 @@ jobs:
         with:
           name: test-report
           path: test-results/junit.xml
-          retention-days: 7  # Optional: set retention period
+          retention-days: 7
